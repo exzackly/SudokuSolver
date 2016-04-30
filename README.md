@@ -1,2 +1,2 @@
 # SudokuSolver
-Java Sudoku Solver
+Java Bruteforce Sudoku Solver
