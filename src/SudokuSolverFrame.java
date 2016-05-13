@@ -4,7 +4,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
@@ -16,15 +15,20 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class SudokuSolverFrame extends JFrame {
 
 	private Integer[][] puzzle = { { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, };
+			{ 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
 	private JPanel contentPane;
 	private JTable sudokuTable;
+	private final JLabel lblSudokuSolverByEXZACKLY = new JLabel("<html><b>Sudoku Solver</b><br>\r\nby EXZACKLY</html>");
+	private final JLabel lblInstructionsLabel = new JLabel("<html>Click input puzzle to import puzzle<br>\r\n<br>Click solve puzzle to solve</html>");
+	private final JButton btnInputPuzzle = new JButton("Input Puzzle");
+	private final JButton btnSolvePuzzle = new JButton("Solve Puzzle");
 
 	/**
 	 * Launch the application.
@@ -82,28 +86,33 @@ public class SudokuSolverFrame extends JFrame {
 
 		sudokuTable.setRowHeight(78);
 		sudokuTable.setFont(new Font("Dialog", Font.PLAIN, 70));
+		lblSudokuSolverByEXZACKLY.setFont(new Font("Tahoma", Font.PLAIN, 33));
+		lblSudokuSolverByEXZACKLY.setHorizontalAlignment(SwingConstants.CENTER);
 
-		JLabel lblSudokuSolverBy = new JLabel("<html>Sudoku Solver <br>\r\nby EXZACKLY</html>");
-		lblSudokuSolverBy.setBounds(781, 102, 133, 78);
-		contentPane.add(lblSudokuSolverBy);
+		lblSudokuSolverByEXZACKLY.setBounds(742, 62, 211, 135);
+		contentPane.add(lblSudokuSolverByEXZACKLY);
 
-		JButton btnInputPuzzle = new JButton("Input Puzzle");
 		btnInputPuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				puzzle = parsePuzzle(JOptionPane.showInputDialog(contentPane, "Input puzzle"));
 				reloadTable();
 			}
 		});
-		btnInputPuzzle.setBounds(759, 242, 180, 43);
+		lblInstructionsLabel.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblInstructionsLabel.setHorizontalTextPosition(SwingConstants.CENTER);
+		lblInstructionsLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		lblInstructionsLabel.setBounds(742, 345, 211, 172);
+		contentPane.add(lblInstructionsLabel);
+		btnInputPuzzle.setBounds(742, 247, 211, 50);
 		contentPane.add(btnInputPuzzle);
 
-		JButton btnSolvePuzzle = new JButton("Solve Puzzle");
 		btnSolvePuzzle.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				solvePuzzle(puzzle);
 			}
 		});
-		btnSolvePuzzle.setBounds(769, 318, 170, 35);
+		btnSolvePuzzle.setBounds(742, 568, 211, 50);
 		contentPane.add(btnSolvePuzzle);
 
 		reloadTable();
@@ -142,9 +151,9 @@ public class SudokuSolverFrame extends JFrame {
 		return puzzleArray;
 	}
 
-	public boolean solvePuzzle(Integer[][] puzzle) {
-		if (puzzleIsSolved(puzzle)) {
-			return true;
+	public void solvePuzzle(Integer[][] puzzle) {
+		if (puzzleIsSolved(puzzle) || puzzleIsSolved(this.puzzle)) {
+			return;
 		}
 
 		for (int row = 0; row != 9; row++) {
@@ -156,11 +165,10 @@ public class SudokuSolverFrame extends JFrame {
 							solvePuzzle(copyArray(puzzle));
 						}
 					}
-					return false;
+					return;
 				}
 			}
 		}
-		return false;
 	}
 
 	public static Integer[][] copyArray(Integer[][] array) {
